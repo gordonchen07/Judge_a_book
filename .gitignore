@@ -138,6 +138,6 @@ dmypy.json
 # Data Files
 *.png
 *.json
-
+*.ipynb_checkpoints/
 
 # End of https://www.gitignore.io/api/macos,python
