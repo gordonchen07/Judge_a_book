@@ -1,28 +1,33 @@
-#Import libraries
+"""Functions for working with book covers"""
 import boto3
 import os
 import json
 from urllib.request import urlopen
-import pandas as pd
 
-#Defining a function to get the book cover image with in input ISBN
+
 def get_cover(isbn):
+    """Defining a function to get the book cover image with in input ISBN"""
     APIKEY = os.getenv("BOOKAPIKEY")
     BASE_GBOOKS_API_URL = "https://www.googleapis.com/books/v1/volumes?q="
-    #Navigate to webpage of the Google Books Volume that contains the link to the book cover image
 
-    url = BASE_GBOOKS_API_URL + str(isbn) + '&key={}'.format(APIKEY)
+    # Navigate to webpage of the Google Books Volume that contains the link to
+    # the book cover image.
 
-    #Saves all texts from webpage into a json file
+    url = BASE_GBOOKS_API_URL + isbn + '&key={}'.format(APIKEY)
+
+    # Saves all texts from webpage into a json file
     response = urlopen(url)
     book_json = json.load(response)
 
-    #Locate link to book cover image from json file
+    # Locate link to book cover image from json file
     try:
-        image_url = book_json['items'][0]['volumeInfo']['imageLinks']['thumbnail']
+        image_url = (book_json['items'][0]
+                              ['volumeInfo']
+                              ['imageLinks']
+                              ['thumbnail'])
         image_req = urlopen(image_url)
         return image_req
-    #Returns a message with ISBN number and No image if a book cover image is not found in the json file
+    # Returns None if there is KeyError
     except KeyError:
         return None
 
@@ -32,6 +37,8 @@ def save_cover(image_req,
                new_directory='BookCovers',
                parent_directory=None,
                mode='local'):
+    """Function to save book cover from http request"""
+
     if parent_directory is None:
         parent_directory = os.getcwd()
     path = os.path.join(parent_directory, new_directory)
@@ -47,6 +54,7 @@ def save_cover(image_req,
         image_file.close()
     elif mode == 's3':
         data = image_req.read()
-        s3.Bucket('judge-a-book').put_object(Key='BookCovers/'+str(isbn)+'.png', Body=data)
+        Key = 'BookCovers/'+str(isbn)+'.png'
+        s3.Bucket('judge-a-book').put_object(Key=Key, Body=data)
     else:
         raise ValueError('Save mode not acceptable.')

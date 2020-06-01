@@ -1,5 +1,6 @@
 from getcover import get_cover, save_cover
 import pandas as pd
+import json
 
 
 # client = boto3.client('rekognition')
@@ -19,9 +20,8 @@ import pandas as pd
 # s3.Bucket('judge-a-book').put_object(Key='responses/1934876569.json', Body=res_bytes)
 
 if __name__ == '__main__':
-    df = pd.read_json('goodreads_books_children.json', lines=True)
-    df = df[df['isbn'] != '']
-    isbn_numbers = df.isbn[:10].tolist()
-    for isbn in isbn_numbers:
+    f = open('isbn.json')
+    isbns = json.load(f)
+    for isbn in isbns:
         print(isbn)
         save_cover(get_cover(isbn), isbn, mode='s3')
