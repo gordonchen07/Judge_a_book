@@ -58,3 +58,10 @@ def save_cover(image_req,
         s3.Bucket('judge-a-book').put_object(Key=Key, Body=data)
     else:
         raise ValueError('Save mode not acceptable.')
+
+
+if __name__ == '__main__':
+    f = open('isbn.json')
+    isbns = json.load(f)
+    for isbn in tqdm(isbns[:10000]):
+        save_cover(get_cover(isbn), isbn, mode='s3')
