@@ -139,5 +139,7 @@ dmypy.json
 *.png
 *.json
 *.ipynb_checkpoints/
+*.pkl
+*.csv
 
 # End of https://www.gitignore.io/api/macos,python
