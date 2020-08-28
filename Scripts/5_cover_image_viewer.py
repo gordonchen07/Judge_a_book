@@ -1,3 +1,4 @@
+"""Function to view bookcover images by ISBN number"""
 from boto3 import client
 from matplotlib import pyplot as plt, image as mpimg
 from io import BytesIO

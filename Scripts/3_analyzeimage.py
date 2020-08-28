@@ -1,3 +1,4 @@
+"""Function to analyze images with AWS Rekognition"""
 import json
 import boto3
 from boto3 import client

@@ -1,3 +1,4 @@
+"""Function for compiling ISBN numbers into a json file"""
 import pandas as pd
 import json
 
